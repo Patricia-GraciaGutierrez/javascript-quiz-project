@@ -21,7 +21,12 @@ class Quiz {
     }
 
     checkAnswer(answer) {
-        if (answer) this.correctAnswers++;
+        const correctAns = this.getQuestion().answer; /* quiz.questions[quiz.currentQuestionIndex] */
+        if(!answer || this.currentQuestionIndex >= this.questions.length) {
+            return
+        } else if (answer === correctAns){
+            this.correctAnswers++;
+        }
     }
 
     hasEnded() {
