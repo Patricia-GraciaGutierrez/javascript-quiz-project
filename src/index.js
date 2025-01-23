@@ -45,13 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   /************  SHOW INITIAL CONTENT  ************/
 
-  // Convert the time remaining in seconds to minutes and seconds, and pad the numbers with zeros if needed
-  const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
-  const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+
 
   // Display the time remaining in the time remaining container
   const timeRemainingContainer = document.getElementById("timeRemaining");
-  timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+
 
   quizView.style.position = "relative";
   timeRemainingContainer.style.position = "absolute";
@@ -63,13 +61,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   /************  TIMER  ************/
-  
-  let timer = setInterval(() => {
+  function updateCountdown() {
     if (quiz.timeRemaining > 0) {
-      
-    }
-  });
+      quiz.timeRemaining--;
 
+      // Convert the time remaining in seconds to minutes and seconds, and pad the numbers with zeros if needed
+      const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+      const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+
+      timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+
+    } else {
+      clearInterval();
+
+      showResults();
+    }
+  }
+
+  // Llamar a la función cada segundo
+  let timer = setInterval(updateCountdown, 1000);
 
   /************  EVENT LISTENERS  ************/
 
@@ -109,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Update the inner text of the question container element and show the question text
     /* Si lo hiciese iterando directamente sobre el array questions, la pregunta y las respuestas no se corresponderían*/
     /* questions.forEach(question => { */
-      questionContainer.innerText = question.text;
+    questionContainer.innerText = question.text;
     /* }); */
 
     // 2. Update the green progress bar
@@ -166,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1. Get all the choice elements. You can use the `document.querySelectorAll()` method.
     const choices = document.querySelectorAll("#choices input");
     /* console.log(choices); */
-    
+
     // 2. Loop through all the choice elements and check which one is selected
     // Hint: Radio input elements have a property `.checked` (e.g., `element.checked`).
     //  When a radio input gets selected the `.checked` property will be set to true.
@@ -176,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currChoice.checked) selectedAnswer = currChoice.value;
     });
     /* console.log(selectedAnswer); */
-    
+
 
     // 3. If an answer is selected (`selectedAnswer`), check if it is correct and move to the next question
     // Check if selected answer is correct by calling the quiz method `checkAnswer()` with the selected answer.
@@ -190,12 +200,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showResults() {
 
+    //clear the timer interval when the quiz ends
+    clearInterval(timer);
+
     // YOUR CODE HERE:
     //
     // 1. Hide the quiz view (div#quizView)
     quizView.style.display = "none";
 
-    
+
     // 2. Show the end view (div#endView)
     endView.style.display = "flex";
 
@@ -209,17 +222,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 2. Show the quiz view (div#quizView)
     quizView.style.display = "block";
-    
+
     // 3. Reset the currentQuestionIndex to 0
     quiz.currentQuestionIndex = 0;
-    
+
     // 3. Reset the correctAnswers to 0
     quiz.correctAnswers = 0;
-    
+
     // 3. Shuffle the questions
     quiz.shuffleQuestions();
 
     // 3. Show the first question
     showQuestion();
+
+    // 4. reset the timeRemaining 
+    quiz.timeRemaining = quizDuration;
+
+    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+
+    timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+
+    timer = setInterval(updateCountdown, 1000);
   }
 });
+
+
+
+
