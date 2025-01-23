@@ -50,11 +50,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Display the time remaining in the time remaining container
   const timeRemainingContainer = document.getElementById("timeRemaining");
 
-
   quizView.style.position = "relative";
   timeRemainingContainer.style.position = "absolute";
   timeRemainingContainer.style.top = "30px";
   timeRemainingContainer.style.left = "500px";
+
+  const timeRemainingData = () => {
+    // Convert the time remaining in seconds to minutes and seconds, and pad the numbers with zeros if needed
+    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
+    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
+
+    timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+  };
 
   // Show first question
   showQuestion();
@@ -65,11 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (quiz.timeRemaining > 0) {
       quiz.timeRemaining--;
 
-      // Convert the time remaining in seconds to minutes and seconds, and pad the numbers with zeros if needed
-      const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
-      const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
-
-      timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+      timeRemainingData();
 
     } else {
       clearInterval(timer);
@@ -78,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Llamar a la función cada segundo
+  // Call the function every second
   let timer = setInterval(updateCountdown, 1000);
 
   /************  EVENT LISTENERS  ************/
@@ -238,10 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 4. reset the timeRemaining 
     quiz.timeRemaining = quizDuration;
 
-    const minutes = Math.floor(quiz.timeRemaining / 60).toString().padStart(2, "0");
-    const seconds = (quiz.timeRemaining % 60).toString().padStart(2, "0");
-
-    timeRemainingContainer.innerText = `${minutes}:${seconds}`;
+    timeRemainingData();
 
     timer = setInterval(updateCountdown, 1000);
   }
