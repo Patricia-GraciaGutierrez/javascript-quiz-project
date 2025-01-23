@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timeRemainingContainer.innerText = `${minutes}:${seconds}`;
 
     } else {
-      clearInterval();
+      clearInterval(timer);
 
       showResults();
     }
