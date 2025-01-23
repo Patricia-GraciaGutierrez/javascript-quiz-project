@@ -20,19 +20,24 @@ class Quiz {
         this.questions.sort(() => Math.random() - 0.5);
     }
 
+   
     checkAnswer(answer) {
-        const correctAns = this.getQuestion().answer; /* quiz.questions[quiz.currentQuestionIndex] */
-        if(!answer || this.currentQuestionIndex >= this.questions.length) {
-            return
-        } else if (answer === correctAns){
+         /* quiz.questions[quiz.currentQuestionIndex] */
+        /* if (!answer || this.currentQuestionIndex > this.questions.length) {
+            return;
+        }  */
+        if (answer === this.getQuestion()?.answer) {
             this.correctAnswers++;
         }
     }
 
     hasEnded() {
+        console.log(this.currentQuestionIndex);
+        
         if (this.currentQuestionIndex < this.questions.length) {
             return false;
         } else {
+            console.log("ended");
             return true;
         };
     }

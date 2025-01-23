@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 2. Update the green progress bar
     // Update the green progress bar (div#progressBar) width so that it shows the percentage of questions answered
 
-    progressBar.style.width = `${(quiz.currentQuestionIndex) * 100 / quiz.questions.length}%`; // This value is hardcoded as a placeholder
+    progressBar.style.width = `${(quiz.currentQuestionIndex) * 100 / (quiz.questions.length)}%`; // This value is hardcoded as a placeholder
 
 
     // 3. Update the question count text 
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //  You can use check which choice was selected by checking if the `.checked` property is true.
     [...choices].forEach(currChoice => {
       if (!currChoice.checked) return;
-      if (currChoice.checked) selectedAnswer = currChoice;
+      if (currChoice.checked) selectedAnswer = currChoice.value;
     });
     /* console.log(selectedAnswer); */
     
@@ -174,8 +174,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // Move to the next question by calling the quiz method `moveToNextQuestion()`.
     // Show the next question by calling the function `showQuestion()`.
     quiz.checkAnswer(selectedAnswer);
+    console.log("moverse a la siguiente");
+    
     quiz.moveToNextQuestion();
-    showQuestion();
+    if (quiz.currentQuestionIndex < questions.length) {
+      console.log("hola")
+      showQuestion();
+
+    }
   }
 
 
@@ -183,11 +189,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function showResults() {
 
+    console.log("showResults called 1")
     // YOUR CODE HERE:
     //
     // 1. Hide the quiz view (div#quizView)
     quizView.style.display = "none";
 
+    console.log(quizView)
     // 2. Show the end view (div#endView)
     endView.style.display = "flex";
 
