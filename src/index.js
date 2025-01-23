@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // End view elements
   const resultContainer = document.querySelector("#result");
-
+  const resetButton = document.querySelector("#restartButton");
 
   /************  SET VISIBILITY OF VIEWS  ************/
 
@@ -53,19 +53,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const timeRemainingContainer = document.getElementById("timeRemaining");
   timeRemainingContainer.innerText = `${minutes}:${seconds}`;
 
+  quizView.style.position = "relative";
+  timeRemainingContainer.style.position = "absolute";
+  timeRemainingContainer.style.top = "30px";
+  timeRemainingContainer.style.left = "500px";
+
   // Show first question
   showQuestion();
 
 
   /************  TIMER  ************/
-
-  let timer;
+  
+  let timer = setInterval(() => {
+    if (quiz.timeRemaining > 0) {
+      
+    }
+  });
 
 
   /************  EVENT LISTENERS  ************/
 
   nextButton.addEventListener("click", nextButtonHandler);
-
+  resetButton.addEventListener("click", resetQuiz);
 
 
   /************  FUNCTIONS  ************/
@@ -174,28 +183,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // Move to the next question by calling the quiz method `moveToNextQuestion()`.
     // Show the next question by calling the function `showQuestion()`.
     quiz.checkAnswer(selectedAnswer);
-    console.log("moverse a la siguiente");
-    
     quiz.moveToNextQuestion();
-    if (quiz.currentQuestionIndex < questions.length) {
-      console.log("hola")
-      showQuestion();
-
-    }
+    showQuestion();
   }
-
-
 
 
   function showResults() {
 
-    console.log("showResults called 1")
     // YOUR CODE HERE:
     //
     // 1. Hide the quiz view (div#quizView)
     quizView.style.display = "none";
 
-    console.log(quizView)
+    
     // 2. Show the end view (div#endView)
     endView.style.display = "flex";
 
@@ -203,4 +203,23 @@ document.addEventListener("DOMContentLoaded", () => {
     resultContainer.innerText = `You scored ${quiz.correctAnswers} out of ${quiz.questions.length} correct answers!`; // This value is hardcoded as a placeholder
   }
 
+  function resetQuiz() {
+    // 1. Hide the end view (div#endView)
+    endView.style.display = "none";
+
+    // 2. Show the quiz view (div#quizView)
+    quizView.style.display = "block";
+    
+    // 3. Reset the currentQuestionIndex to 0
+    quiz.currentQuestionIndex = 0;
+    
+    // 3. Reset the correctAnswers to 0
+    quiz.correctAnswers = 0;
+    
+    // 3. Shuffle the questions
+    quiz.shuffleQuestions();
+
+    // 3. Show the first question
+    showQuestion();
+  }
 });
